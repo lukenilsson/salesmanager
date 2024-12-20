@@ -17,7 +17,9 @@ class DashboardController < ApplicationController
 
     # Data for charts or summary (e.g. total quantity sold, top products, etc.)
     @total_quantity = @sales.sum(:quantity)
-    @top_accounts = @sales.group("accounts.name").sum(:quantity).sort_by{|_,qty| -qty}.first(10)
+    @top_accounts = Sale.joins(:account)
+    .group("accounts.name")
+    .sum(:quantity)
     @top_products = @sales.group("products.name").sum(:quantity).sort_by{|_,qty| -qty}.first(10)
   end
 end

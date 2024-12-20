@@ -1,2 +1,43 @@
-<h1>Dashboard#index</h1>
-<p>Find me in app/views/dashboard/index.html.erb</p>
+<% @top_accounts.each do |account_name, qty| %>
+<tr class="<%= 'table-danger' if qty > (params[:quantity_threshold].to_i if params[:quantity_threshold]) %>">
+  <td><%= account_name %></td>
+  <td><%= qty %></td>
+</tr>
+<% end %>
+<div class="container my-4">
+  <%= form_with url: reports_path, local: true do |form| %>
+  <div class="mb-3">
+    <%= form.label :file, "Upload Sales Report (CSV)" %>
+    <%= form.file_field :file, class: "form-control" %>
+  </div>
+  <%= form.submit "Upload", class: "btn btn-primary" %>
+  <% end %>
+</div>
+<div class="container my-4">
+  <h1>Sales Dashboard</h1>
+  <%= form_with url: dashboard_path, method: :get, local: true, class: "row g-3 align-items-end" do |form| %>
+  <div class="col-auto">
+    <%= form.label :year, class: "form-label" %>
+    <%= form.text_field :year, value: params[:year], class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= form.label :month, class: "form-label" %>
+    <%= form.text_field :month, value: params[:month], class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= form.label :account_id, "Account", class: "form-label" %>
+    <%= form.collection_select :account_id, Account.all, :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+  <div class="col-auto">
+    <%= form.label :product_id, "Product", class: "form-label" %>
+    <%= form.collection_select :product_id, Product.all, :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+  <div class="col-auto">
+    <%= form.label :quantity_threshold, "Quantity Threshold", class: "form-label" %>
+    <%= form.number_field :quantity_threshold, value: params[:quantity_threshold], class: "form-control" %>
+  </div>
+  <div class="col-auto">
+    <%= form.submit "Filter", class: "btn btn-primary" %>
+  </div>
+  <% end %>
+</div>
