@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
-  get "reports/new"
-  get "reports/index"
-  get "reports/create"
+  get "accounts/show"
+  get "dashboard/index"
+  root "dashboard#index" # Dashboard landing page
+  resources :reports, only: [:new, :index, :create]
+  get 'dashboard', to: 'dashboard#index'
+  #get "reports/new"
+  #get "reports/index"
+  #get "reports/create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
