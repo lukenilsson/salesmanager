@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboard#index'
 
   # Define routes for Accounts
-  resources :accounts, only: [:index, :show]
+  resources :accounts, only: [:index, :show, :edit, :update]
+
 
   resources :reports, only: [:new, :index, :create]
 

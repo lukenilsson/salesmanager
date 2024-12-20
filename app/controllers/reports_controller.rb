@@ -24,8 +24,12 @@ class ReportsController < ApplicationController
 
   def create
     @report = Report.new
-    @report.file.attach(params[:report][:file])
-    file_contents = @report.file.download
+    uploaded_file = params[:report][:file]
+
+    # Read the file's contents directly from the uploaded_file
+    file_contents = uploaded_file.read
+
+    # Compute digest
     digest = Digest::SHA256.hexdigest(file_contents)
     @report.file_digest = digest
 
@@ -33,7 +37,11 @@ class ReportsController < ApplicationController
       flash[:alert] = "This report has already been uploaded."
       redirect_to reports_path
     else
+      # Attach the file so it's stored and can be referenced later if needed
+      @report.file.attach(uploaded_file)
+
       if @report.save
+        # Process the file’s data and insert into database
         process_sales_data(file_contents)
         flash[:notice] = "Report uploaded and processed."
         redirect_to dashboard_path
@@ -44,11 +52,6 @@ class ReportsController < ApplicationController
     end
   end
 
-  def export
-    # This action can explicitly handle CSV exports if desired
-    # For now, we rely on the index action's respond_to CSV block.
-  end
-
   private
 
   def process_sales_data(contents)
@@ -56,11 +59,11 @@ class ReportsController < ApplicationController
     csv = CSV.parse(contents, headers: true)
 
     csv.each do |row|
-      account_name = row["account"]
-      product_name = row["product"]
-      quantity = row["quantity"].to_i
-      date_str = row["date"]
-      year, month = date_str.split("-").map(&:to_i)
+      account_name  = row["account"]
+      product_name  = row["product"]
+      quantity      = row["quantity"].to_i
+      date_str      = row["date"] # e.g., "2024-05"
+      year, month   = date_str.split("-").map(&:to_i)
 
       account = Account.find_or_create_by(name: account_name.strip)
       product = Product.find_or_create_by(name: product_name.strip)

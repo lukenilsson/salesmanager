@@ -1,4 +1,7 @@
 <h1><%= @account.name %></h1>
+<div class="mb-3">
+  <%= link_to "Edit Account", edit_account_path(@account), class: "btn btn-primary" %>
+</div>
 <h3>Purchase History</h3>
 
 <table class="table table-striped">

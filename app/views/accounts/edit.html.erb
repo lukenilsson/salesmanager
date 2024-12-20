@@ -1,0 +1,9 @@
+<h1>Edit Account</h1>
+
+<%= form_with model: @account, local: true do |f| %>
+<div class="mb-3">
+  <%= f.label :name %>
+  <%= f.text_field :name, class: "form-control" %>
+</div>
+<%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
