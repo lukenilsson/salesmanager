@@ -1,2 +1,9 @@
-<h1>Reports#new</h1>
-<p>Find me in app/views/reports/new.html.erb</p>
+<h1>Upload a New Sales Report</h1>
+
+<%= form_with model: @report, local: true do |form| %>
+<div class="mb-3">
+  <%= form.label :file, "Upload Sales Report (CSV)" %>
+  <%= form.file_field :file, class: "form-control" %>
+</div>
+<%= form.submit "Upload", class: "btn btn-primary" %>
+<% end %>

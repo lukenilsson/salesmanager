@@ -1,2 +1,55 @@
-<h1>Reports#index</h1>
-<p>hi</p>
+<h1>Reports</h1>
+
+<div class="mb-3">
+  <%= link_to "Upload New Report", new_report_path, class: "btn btn-primary" %>
+  <%= link_to "Export CSV", reports_path(request.params.merge(format: :csv)), class: "btn btn-secondary" %>
+</div>
+
+<%= form_with url: reports_path, method: :get, local: true, class: "row g-3 mb-4 align-items-end" do |form| %>
+<div class="col-auto">
+  <%= form.label :account_id, "Account", class: "form-label" %>
+  <%= form.collection_select :account_id, @accounts, :id, :name, { include_blank: true }, class: "form-select" %>
+</div>
+<div class="col-auto">
+  <%= form.label :product_id, "Product", class: "form-label" %>
+  <%= form.collection_select :product_id, @products, :id, :name, { include_blank: true }, class: "form-select" %>
+</div>
+<div class="col-auto">
+  <%= form.label :quantity_threshold, "Min Quantity", class: "form-label" %>
+  <%= form.number_field :quantity_threshold, value: params[:quantity_threshold], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.label :year, class: "form-label" %>
+  <%= form.text_field :year, value: params[:year], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.label :month, class: "form-label" %>
+  <%= form.text_field :month, value: params[:month], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.submit "Filter", class: "btn btn-primary" %>
+</div>
+<% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Year</th>
+      <th>Month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sales.each do |sale| %>
+    <tr>
+      <td><%= sale.account.name %></td>
+      <td><%= sale.product.name %></td>
+      <td><%= sale.quantity %></td>
+      <td><%= sale.year %></td>
+      <td><%= sale.month %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

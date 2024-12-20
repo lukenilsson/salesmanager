@@ -1,22 +1,11 @@
 Rails.application.routes.draw do
-  get "accounts/show"
-  get "dashboard/index"
-  root "dashboard#index" # Dashboard landing page
-  resources :reports, only: [:new, :index, :create]
+  root "dashboard#index"
   get 'dashboard', to: 'dashboard#index'
-  #get "reports/new"
-  #get "reports/index"
-  #get "reports/create"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Define routes for Accounts
+  resources :accounts, only: [:index, :show]
+
+  resources :reports, only: [:new, :index, :create]
+
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
