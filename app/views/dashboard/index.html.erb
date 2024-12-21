@@ -1,31 +1,42 @@
 <h1>Dashboard</h1>
 <div class="row mb-4">
+  <!-- Total Accounts -->
   <div class="col-md-4">
     <div class="card text-center">
       <div class="card-body">
         <h5 class="card-title">Total Accounts Uploaded</h5>
-        <h1><%= @total_accounts %></h1>
+        <h1>
+          <%= link_to @total_accounts, accounts_path, class: "stretched-link text-decoration-none text-dark" %>
+        </h1>
       </div>
     </div>
   </div>
+
+  <!-- Most Popular Product -->
   <div class="col-md-4">
     <div class="card text-center">
       <div class="card-body">
         <h5 class="card-title">Most Popular Product</h5>
-        <h1><%= @most_popular_product_name %></h1>
+        <h1>
+          <% if @most_popular_product_name != "No data available" %>
+          <%= link_to @most_popular_product_name, product_path(Product.find_by(name: @most_popular_product_name)), class: "stretched-link text-decoration-none text-dark" %>
+          <% else %>
+          <span><%= @most_popular_product_name %></span>
+          <% end %>
+        </h1>
       </div>
     </div>
   </div>
+
+  <!-- Total Units Sold -->
   <div class="col-md-4">
     <div class="card text-center">
       <div class="card-body">
         <h5 class="card-title">Total Units Sold</h5>
-        <h1><%= @total_units_sold %></h1>
+        <h1>
+          <%= link_to @total_units_sold, reports_path, class: "stretched-link text-decoration-none text-dark" %>
+        </h1>
       </div>
     </div>
   </div>
-</div>
-
-<div class="text-center">
-  <img src="<%= asset_path('HPlogo.png') %>" alt="Company Logo" style="max-height: 100px;">
 </div>

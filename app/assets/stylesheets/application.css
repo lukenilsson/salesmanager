@@ -1,10 +1,32 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* Styles for the background logo */
+.background-logo {
+  position: fixed; /* Fixed to stay in place during scrolling */
+  top: 0; /* Start at the top of the page */
+  left: 0; /* Align to the left */
+  width: 100%; /* Cover the full width of the page */
+  height: 100%; /* Cover the full height of the page */
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: -1; /* Push the logo behind all other elements */
+  opacity: 0.4; /* Make the logo semi-opaque */
+  pointer-events: none; /* Prevent interactions with the logo */
+}
+
+.background-logo img {
+  max-width: 80%; /* Set the max width for the image */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Navbar and content layering to appear above the logo */
+nav, .content {
+  position: relative;
+  z-index: 1; /* Ensure content is above the background */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .background-logo img {
+    max-width: 50%; /* Scale down the logo for smaller screens */
+  }
+}
