@@ -44,8 +44,12 @@
   <tbody>
     <% @sales.each do |sale| %>
     <tr>
-      <td><%= sale.account.name %></td>
-      <td><%= sale.product.name %></td>
+      <!-- Link to the account's show page -->
+      <td><%= link_to sale.account.name, account_path(sale.account), class: "text-primary" %></td>
+
+      <!-- Link to the product's show page -->
+      <td><%= link_to sale.product.name, product_path(sale.product), class: "text-primary" %></td>
+
       <td><%= sale.quantity %></td>
       <td><%= sale.year %></td>
       <td><%= sale.month %></td>

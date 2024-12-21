@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # Define routes for Accounts
   resources :accounts, only: [:index, :show, :edit, :update]
-
+  resources :products, only: [:show]
 
   resources :reports, only: [:new, :index, :create]
 

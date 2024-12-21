@@ -1,0 +1,22 @@
+<h1><%= @product.name %></h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Quantity</th>
+      <th>Year</th>
+      <th>Month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sales.each do |sale| %>
+    <tr>
+      <td><%= link_to sale.account.name, account_path(sale.account), class: "text-primary" %></td>
+      <td><%= sale.quantity %></td>
+      <td><%= sale.year %></td>
+      <td><%= sale.month %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
