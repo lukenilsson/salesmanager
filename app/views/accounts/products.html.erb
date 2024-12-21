@@ -1,0 +1,40 @@
+<h1>Products Sold by <%= @account.name %></h1>
+
+<!-- Filter Form -->
+<%= form_with url: products_account_path(@account), method: :get, local: true, class: "row g-3 mb-4 align-items-end" do |form| %>
+<div class="col-auto">
+  <%= form.label :product_name, "Product Name", class: "form-label" %>
+  <%= form.text_field :product_name, value: params[:product_name], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.label :start_date, "Start Date", class: "form-label" %>
+  <%= form.date_field :start_date, value: params[:start_date], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.label :end_date, "End Date", class: "form-label" %>
+  <%= form.date_field :end_date, value: params[:end_date], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.submit "Filter", class: "btn btn-primary" %>
+</div>
+<% end %>
+
+<!-- Products Table -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Quantity</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sales.each do |sale| %>
+    <tr>
+      <td><%= sale.product.name %></td>
+      <td><%= sale.quantity %></td>
+      <td><%= sale.created_at.to_date %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

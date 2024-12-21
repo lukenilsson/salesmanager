@@ -5,10 +5,9 @@ class AccountsController < ApplicationController
 
   def show
     @account = Account.find(params[:id])
-    # Load the purchase history for this account
     @sales = @account.sales.includes(:product)
-    # Apply filters if needed (e.g., year, month, product, etc.)
   end
+
   def edit
     @account = Account.find(params[:id])
   end
@@ -16,20 +15,15 @@ class AccountsController < ApplicationController
   def update
     @account = Account.find(params[:id])
     new_name = params[:account][:name]
-  
+
     if @account.name != new_name
-      # Check if new_name already exists
       existing_account = Account.find_by(name: new_name)
       if existing_account
-        # Move sales from the old account to the existing account
         @account.sales.update_all(account_id: existing_account.id)
-  
-        # Destroy the old account
         @account.destroy
         flash[:notice] = "Accounts merged successfully."
         redirect_to accounts_path
       else
-        # Just rename if no merge needed
         if @account.update(name: new_name)
           flash[:notice] = "Account name updated."
           redirect_to accounts_path
@@ -39,8 +33,24 @@ class AccountsController < ApplicationController
         end
       end
     else
-      # Name hasn't changed
       redirect_to accounts_path
     end
   end
+
+  def products
+    @account = Account.find(params[:id])
+  
+    # Fetch sales with product details for this account
+    @sales = @account.sales.includes(:product)
+  
+    # Apply filters
+    if params[:product_name].present?
+      @sales = @sales.joins(:product).where("products.name ILIKE ?", "%#{params[:product_name]}%")
+    end
+  
+    if params[:start_date].present? && params[:end_date].present?
+      @sales = @sales.where("sales.created_at BETWEEN ? AND ?", params[:start_date], params[:end_date])
+    end
+  end
+  
 end

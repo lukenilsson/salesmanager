@@ -4,13 +4,26 @@
   <thead>
     <tr>
       <th>Account Name</th>
+      <th>Total Products Sold</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <% @accounts.each do |account| %>
     <tr>
-      <td><%= link_to account.name, account_path(account) %> </td>
-      <td> <%= link_to "Edit", edit_account_path(account), class: "btn btn-primary btn-sm" %></td>
+      <!-- Account name links to the account's show page -->
+      <td><%= link_to account.name, account_path(account) %></td>
+
+      <!-- Total products sold links to the new page showing product details -->
+      <td>
+        <%= link_to account.sales.select(:product_id).distinct.count, products_account_path(account), class: "text-primary" %>
+      </td>
+
+
+      <!-- Edit button -->
+      <td>
+        <%= link_to "Edit", edit_account_path(account), class: "btn btn-primary btn-sm" %>
+      </td>
     </tr>
     <% end %>
   </tbody>
