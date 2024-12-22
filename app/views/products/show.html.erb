@@ -1,12 +1,39 @@
 <h1><%= @product.name %></h1>
+<div class="mb-3">
+  <%= link_to "Export CSV", export_sales_product_path(@product, format: :csv), class: "btn btn-secondary" %>
+</div>
 
+
+<%= form_with url: product_path(@product), method: :get, local: true, class: "row g-3 mb-4 align-items-end" do |form| %>
+<div class="col-auto">
+  <%= form.label :account_id, "Account", class: "form-label" %>
+  <%= form.collection_select :account_id, @accounts, :id, :name, { include_blank: true }, class: "form-select" %>
+</div>
+<div class="col-auto">
+  <%= form.label :quantity_threshold, "Min Quantity", class: "form-label" %>
+  <%= form.number_field :quantity_threshold, value: params[:quantity_threshold], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.label :year, "Year", class: "form-label" %>
+  <%= form.text_field :year, value: params[:year], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.label :month, "Month", class: "form-label" %>
+  <%= form.text_field :month, value: params[:month], class: "form-control" %>
+</div>
+<div class="col-auto">
+  <%= form.submit "Filter", class: "btn btn-primary" %>
+</div>
+<% end %>
+
+<!-- Sales Table -->
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Account</th>
-      <th>Quantity</th>
-      <th>Year</th>
-      <th>Month</th>
+      <th><%= sortable "account_id", "Account" %></th>
+      <th><%= sortable "quantity", "Quantity" %></th>
+      <th><%= sortable "year", "Year" %></th>
+      <th><%= sortable "month", "Month" %></th>
     </tr>
   </thead>
   <tbody>
@@ -20,3 +47,7 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="text-center">
+  <img src="<%= asset_path('HPlogo.png') %>" alt="Company Logo" style="max-height: 100px;">
+</div>

@@ -1,10 +1,8 @@
 class ReportsController < ApplicationController
   def index
-    # Display all cumulative reports, add filtering logic here
-    @accounts = Account.all
-    @products = Product.all
+    @accounts = Account.order(:name) # Sort A-Z
+    @products = Product.order(:name) # Sort A-Z
 
-    # Apply filters
     @sales = Sale.includes(:account, :product).all
     @sales = @sales.where(account_id: params[:account_id]) if params[:account_id].present?
     @sales = @sales.where(product_id: params[:product_id]) if params[:product_id].present?
@@ -12,8 +10,11 @@ class ReportsController < ApplicationController
     @sales = @sales.where(year: params[:year]) if params[:year].present?
     @sales = @sales.where(month: params[:month]) if params[:month].present?
 
+    # Apply sorting
+    @sales = @sales.order(sort_column + " " + sort_direction)
+
     respond_to do |format|
-      format.html # renders index.html.erb
+      format.html
       format.csv { send_data @sales.to_csv, filename: "sales-#{Date.today}.csv" }
     end
   end
@@ -53,6 +54,14 @@ class ReportsController < ApplicationController
   end
 
   private
+  
+  def sort_column
+    Sale.column_names.include?(params[:sort]) ? params[:sort] : "id"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end
 
   def process_sales_data(contents)
     require 'csv'

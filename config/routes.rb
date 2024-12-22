@@ -1,4 +1,9 @@
+# config/routes.rb
+
 Rails.application.routes.draw do
+  #get "sales/edit"
+  #get "sales/update"
+  #get "sales/destroy"
   root "dashboard#index"
   get 'dashboard', to: 'dashboard#index'
 
@@ -6,10 +11,18 @@ Rails.application.routes.draw do
   resources :accounts, only: [:index, :show, :edit, :update] do
     # Nested route for products sold by a specific account
     get 'products', on: :member
+    # Custom route for exporting sales to CSV
+    get 'export_sales', on: :member
+
+    # Nested Sales Routes
+    resources :sales, only: [:edit, :update, :destroy]
   end
 
   # Define routes for Products
-  resources :products, only: [:show]
+  resources :products, only: [:show] do
+    # Custom route for exporting sales to CSV
+    get 'export_sales', on: :member
+  end
 
   # Define routes for Reports
   resources :reports, only: [:new, :index, :create]
