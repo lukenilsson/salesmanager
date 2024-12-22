@@ -16,7 +16,7 @@
   <tbody>
     <% @sales.each do |sale| %>
     <tr>
-      <td><%= sale.product.name %></td>
+      <td><%= link_to sale.product.name, product_path(sale.product) %></td>
       <td><%= sale.quantity %></td>
       <td><%= sale.year %></td>
       <td><%= sale.month %></td>

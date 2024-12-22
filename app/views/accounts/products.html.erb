@@ -1,4 +1,4 @@
-<h1>Products Sold by <%= @account.name %></h1>
+<h1>Products Sold to <%= @account.name %></h1>
 
 <!-- Filter Form -->
 <%= form_with url: products_account_path(@account), method: :get, local: true, class: "row g-3 mb-4 align-items-end" do |form| %>
@@ -31,7 +31,7 @@
   <tbody>
     <% @sales.each do |sale| %>
     <tr>
-      <td><%= sale.product.name %></td>
+      <td><%= link_to sale.product.name, product_path(sale.product) %></td>
       <td><%= sale.quantity %></td>
       <td><%= sale.created_at.to_date %></td>
     </tr>
