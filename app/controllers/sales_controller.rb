@@ -1,9 +1,11 @@
 # app/controllers/sales_controller.rb
 
 class SalesController < ApplicationController
-  include Sortable
+
   before_action :set_account
   before_action :set_sale, only: [:edit, :update, :destroy]
+
+  #before_action :permit_sorting_params, only: [:index]
 
   def edit
     # @sale is already set by before_action

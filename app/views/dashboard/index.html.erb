@@ -18,8 +18,8 @@
       <div class="card-body">
         <h5 class="card-title">Most Popular Product</h5>
         <h1>
-          <% if @most_popular_product_name != "No data available" %>
-          <%= link_to @most_popular_product_name, product_path(Product.find_by(name: @most_popular_product_name)), class: "stretched-link text-decoration-none text-dark" %>
+          <% if @most_popular_product_id.present? %>
+          <%= link_to @most_popular_product_name, product_path(@most_popular_product_id), class: "stretched-link text-decoration-none text-dark" %>
           <% else %>
           <span><%= @most_popular_product_name %></span>
           <% end %>

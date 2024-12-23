@@ -9,10 +9,16 @@ pagination
 
 /accounts/id 
   have # of products they have purchased listed somewhere.
-  
+
+distributors
+  - when uploading spreadsheet identify what distro it is from
+  - have distro linked to purchase order
+  - on account page be able see, edit, delete a Distro they    have purchased from
+
 
 **BEFORE MONDAY**
 load master TEST spin report to upload all product names 
 ********************************
 
 
+*** Assign each product to a specific id ***

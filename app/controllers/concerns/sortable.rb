@@ -1,10 +1,8 @@
-# app/controllers/concerns/sortable.rb
-
 module Sortable
   extend ActiveSupport::Concern
 
   included do
-    before_action :permit_sorting_params, only: [:index, :show, :products]
+    # Removed the before_action from the concern to allow controllers to specify actions
   end
 
   private
@@ -12,8 +10,8 @@ module Sortable
   ALLOWED_SORT_COLUMNS = %w[product_id quantity year month id].freeze
 
   def permit_sorting_params
-    # Include :id to prevent Rails from flagging it as unpermitted
-    params.permit(:id, :sort, :direction, :product_id, :quantity_threshold, :year, :month)
+    # Permit relevant parameters for sorting and filtering
+    params.permit(:sort, :direction, :product_id, :quantity_threshold, :year, :month)
   end
 
   def sort_column

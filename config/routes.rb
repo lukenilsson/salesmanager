@@ -1,9 +1,4 @@
-# config/routes.rb
-
 Rails.application.routes.draw do
-  #get "sales/edit"
-  #get "sales/update"
-  #get "sales/destroy"
   root "dashboard#index"
   get 'dashboard', to: 'dashboard#index'
 

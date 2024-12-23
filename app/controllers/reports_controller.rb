@@ -1,8 +1,5 @@
-# app/controllers/reports_controller.rb
-
 class ReportsController < ApplicationController
   include Sortable
-  # Add the before_action to permit sorting parameters for the index action
   before_action :permit_sorting_params, only: [:index]
 
   def index
@@ -63,12 +60,13 @@ class ReportsController < ApplicationController
 
   # Permit sorting parameters and make them accessible
   def permit_sorting_params
-    @permitted_params = params.permit(:sort, :direction)
+    # Note: @permitted_params is not used in Sortable; sort_column and sort_direction use params directly
+    params.permit(:sort, :direction, :account_id, :product_id, :quantity_threshold, :year, :month)
   end
 
   # Use the permitted parameters for sorting
   def sort_column
-    case @permitted_params[:sort]
+    case params[:sort]
     when "product_id"
       "products.name" # Sort by product name
     when "account_id"
@@ -76,12 +74,12 @@ class ReportsController < ApplicationController
     when "id"
       "sales.id" # Explicitly use sales table's id
     else
-      Sale.column_names.include?(@permitted_params[:sort]) ? "sales.#{@permitted_params[:sort]}" : "sales.id"
+      Sale.column_names.include?(params[:sort]) ? "sales.#{params[:sort]}" : "sales.id"
     end
   end
 
   def sort_direction
-    %w[asc desc].include?(@permitted_params[:direction]) ? @permitted_params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   def process_sales_data(contents)

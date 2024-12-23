@@ -21,12 +21,13 @@ class DashboardController < ApplicationController
 
     # Most popular product
     @most_popular_product = @sales.joins(:product)
-                                   .group("products.name")
+                                   .group("products.id, products.name")
                                    .order("SUM(sales.quantity) DESC")
                                    .limit(1)
-                                   .pluck("products.name, SUM(sales.quantity)")
+                                   .pluck("products.id, products.name, SUM(sales.quantity)")
                                    .first
-    @most_popular_product_name = @most_popular_product ? @most_popular_product[0] : "No data available"
+    @most_popular_product_id = @most_popular_product ? @most_popular_product[0] : nil
+    @most_popular_product_name = @most_popular_product ? @most_popular_product[1] : "No data available"
 
     # Total units sold
     @total_units_sold = @sales.sum(:quantity)

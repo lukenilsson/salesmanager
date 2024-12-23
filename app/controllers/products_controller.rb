@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
   include Sortable
+
   before_action :set_product, only: [:show, :export_sales]
+  before_action :permit_sorting_params, only: [:show, :export_sales]
 
   def show
     @accounts = Account.order(:name) # Ensure accounts are sorted A-Z

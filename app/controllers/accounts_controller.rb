@@ -1,9 +1,8 @@
-# app/controllers/accounts_controller.rb
-
 class AccountsController < ApplicationController
   include Sortable
 
   before_action :set_account, only: [:show, :edit, :update, :products, :export_sales]
+  before_action :permit_sorting_params, only: [:show, :products, :export_sales]
 
   def index
     @accounts = Account.order(:name) # Sort A-Z for consistency
