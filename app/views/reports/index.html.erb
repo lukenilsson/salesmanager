@@ -13,7 +13,7 @@
   <thead>
     <tr>
       <th><%= sortable "account_id", "Account" %></th>
-      <th><%= sortable "product_id", "Product" %></th>
+      <th><%= link_to "Product", reports_path(sort: "product_id", direction: toggle_direction) %></th>
       <th><%= sortable "quantity", "Quantity" %></th>
       <th><%= sortable "year", "Year" %></th>
       <th><%= sortable "month", "Month" %></th>

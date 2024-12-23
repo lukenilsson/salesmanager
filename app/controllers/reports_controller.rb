@@ -1,4 +1,10 @@
+# app/controllers/reports_controller.rb
+
 class ReportsController < ApplicationController
+  include Sortable
+  # Add the before_action to permit sorting parameters for the index action
+  before_action :permit_sorting_params, only: [:index]
+
   def index
     @accounts = Account.order(:name) # Sort A-Z
     @products = Product.order(:name) # Sort A-Z
@@ -10,8 +16,8 @@ class ReportsController < ApplicationController
     @sales = @sales.where(year: params[:year]) if params[:year].present?
     @sales = @sales.where(month: params[:month]) if params[:month].present?
 
-    # Apply sorting
-    @sales = @sales.order(sort_column + " " + sort_direction)
+    # Use the permitted parameters for sorting
+    @sales = @sales.joins(:account, :product).order("#{sort_column} #{sort_direction}")
 
     respond_to do |format|
       format.html
@@ -54,13 +60,28 @@ class ReportsController < ApplicationController
   end
 
   private
-  
+
+  # Permit sorting parameters and make them accessible
+  def permit_sorting_params
+    @permitted_params = params.permit(:sort, :direction)
+  end
+
+  # Use the permitted parameters for sorting
   def sort_column
-    Sale.column_names.include?(params[:sort]) ? params[:sort] : "id"
+    case @permitted_params[:sort]
+    when "product_id"
+      "products.name" # Sort by product name
+    when "account_id"
+      "accounts.name" # Sort by account name if applicable
+    when "id"
+      "sales.id" # Explicitly use sales table's id
+    else
+      Sale.column_names.include?(@permitted_params[:sort]) ? "sales.#{@permitted_params[:sort]}" : "sales.id"
+    end
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(@permitted_params[:direction]) ? @permitted_params[:direction] : "asc"
   end
 
   def process_sales_data(contents)

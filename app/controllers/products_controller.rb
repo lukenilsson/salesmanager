@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  include Sortable
   before_action :set_product, only: [:show, :export_sales]
 
   def show

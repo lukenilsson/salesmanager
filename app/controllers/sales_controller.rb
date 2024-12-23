@@ -1,6 +1,7 @@
 # app/controllers/sales_controller.rb
 
 class SalesController < ApplicationController
+  include Sortable
   before_action :set_account
   before_action :set_sale, only: [:edit, :update, :destroy]
 

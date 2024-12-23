@@ -1,6 +1,8 @@
 # app/controllers/accounts_controller.rb
 
 class AccountsController < ApplicationController
+  include Sortable
+
   before_action :set_account, only: [:show, :edit, :update, :products, :export_sales]
 
   def index
@@ -18,7 +20,7 @@ class AccountsController < ApplicationController
     @sales = @sales.where(month: params[:month]) if params[:month].present?
 
     # Apply sorting
-    @sales = @sales.order("#{sort_column} #{sort_direction}")
+    @sales = @sales.joins(:product).order("#{sort_column} #{sort_direction}")
 
     respond_to do |format|
       format.html
@@ -69,16 +71,16 @@ class AccountsController < ApplicationController
 
   def export_sales
     @sales = @account.sales.includes(:product)
-  
+
     # Apply filters
     @sales = @sales.where(product_id: params[:product_id]) if params[:product_id].present?
     @sales = @sales.where("quantity >= ?", params[:quantity_threshold].to_i) if params[:quantity_threshold].present?
     @sales = @sales.where(year: params[:year]) if params[:year].present?
     @sales = @sales.where(month: params[:month]) if params[:month].present?
-  
+
     # Apply sorting
     @sales = @sales.order("#{sort_column} #{sort_direction}")
-  
+
     respond_to do |format|
       format.csv { send_data Sale.to_csv(@sales), filename: "account-#{@account.id}-sales-#{Date.today}.csv" }
     end
@@ -93,14 +95,5 @@ class AccountsController < ApplicationController
       flash[:alert] = "Account not found."
       redirect_to accounts_path
     end
-  end
-
-  # Helper methods for sorting
-  def sort_column
-    Sale.column_names.include?(params[:sort]) ? params[:sort] : "product_id"
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end

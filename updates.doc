@@ -1,0 +1,18 @@
+pagination
+  -10, 25, 50, 100 results per page
+  -export to csv not affected
+
+  flash messages
+    - when uploaded / deleting
+    -confirmation or error
+    
+
+/accounts/id 
+  have # of products they have purchased listed somewhere.
+  
+
+**BEFORE MONDAY**
+load master TEST spin report to upload all product names 
+********************************
+
+
